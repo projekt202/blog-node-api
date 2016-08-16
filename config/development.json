@@ -1,0 +1,7 @@
+{
+  "server": {
+    "name": "Todo Services",
+    "version": "1.0.0",
+    "port": "3000"
+  }
+}

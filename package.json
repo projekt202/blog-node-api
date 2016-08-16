@@ -1,0 +1,21 @@
+{
+  "name": "TodoService",
+  "version": "1.0.0",
+  "description": "Todo Services",
+  "main": "app.js",
+  "author": {
+    "name": "Projekt202",
+    "email": "technology@projekt202.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/projekt202/blog-node-api"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "lodash": "^4.15.0",
+    "nconf": "^0.8.4",
+    "require-directory": "^2.1.1",
+    "restify": "^4.1.1"
+  }
+}
