@@ -1,6 +1,7 @@
 /**
  * Created by reggie.samuel on 8/1/2016.
  */
+
 'use strict';
 
 let errorModule = require('../errors');
@@ -8,11 +9,11 @@ let _ = require('lodash');
 
 class UserService {
     getUserById(id) {
-        if (!id || !_.isNumber(id)) {
+        if (!id || !_.isNumber(_.toNumber(id))) {
             throw new errorModule.BadRequestError('id is required');
         }
 
-        return new Promise(function (resolve) {
+        return new Promise((resolve) => {
             resolve({id: id, emailAddress: 'test@gmail.com'});
         });
     }
@@ -22,7 +23,7 @@ class UserService {
             throw new errorModule.BadRequestError('user is required');
         }
 
-        return new Promise(function (resolve) {
+        return new Promise((resolve) => {
             resolve(user);
         });
     }
@@ -40,7 +41,7 @@ class UserService {
             throw new errorModule.BadRequestError('last name is required');
         }
 
-        return new Promise(function (resolve) {
+        return new Promise((resolve) => {
             resolve(user);
         });
     }

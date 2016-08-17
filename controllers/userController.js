@@ -22,7 +22,7 @@ class UserController {
     }
 
     updateUser(req, res, next) {
-        userService.updateUser(req.user).then(function (user) {
+        userService.updateUser(req.user).then((user) => {
             res.send(user);
             return next();
         }).catch(function (e) {
@@ -31,7 +31,7 @@ class UserController {
     }
 
     createUser(req, res, next) {
-        userService.createUser(req.user).then(function (user) {
+        userService.createUser(req.user).then((user) => {
             res.send(user);
             return next();
         }).catch(errorModule.BadRequestError, (e) => {
