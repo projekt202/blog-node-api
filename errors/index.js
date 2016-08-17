@@ -26,5 +26,5 @@ class UnauthorizedError extends Error{
     }
 }
 
-module.exports = BadRequestError;
-module.exports = UnauthorizedError;
+module.exports.BadRequestError = BadRequestError;
+module.exports.UnauthorizedError = UnauthorizedError;

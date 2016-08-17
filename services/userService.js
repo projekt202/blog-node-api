@@ -4,10 +4,11 @@
 'use strict';
 
 let errorModule = require('../errors');
+let _ = require('lodash');
 
 class UserService {
     getUserById(id) {
-        if (!id) {
+        if (!id || !_.isNumber(id)) {
             throw new errorModule.BadRequestError('id is required');
         }
 
