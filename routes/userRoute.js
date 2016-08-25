@@ -7,13 +7,13 @@
 let restify = require('restify');
 
 module.exports = function (server) {
-    let userControllerModule = require('../controllers/userController');
-    let userController = new userControllerModule();
+    let UserController = require('../controllers/userController');
+    let userController = new UserController();
 
     server.get({path: '/user/:id'}, restify.queryParser(),
         userController.getUserById);
 
-    server.put({path: '/user'}, restify.jsonBodyParser(),
+    server.put({path: '/user/:id'}, restify.queryParser(), restify.jsonBodyParser(),
         userController.updateUser);
 
     server.post({path: '/user'}, restify.jsonBodyParser(),

@@ -3,14 +3,17 @@
  */
 
 'use strict';
-
 let restify = require('restify');
-let userServiceModule = require('../services/userService');
-let userService = new userServiceModule();
+let UserService = require('../services/userService');
+let userService = new UserService();
 let errorModule = require('../errors');
 
 class UserController {
     getUserById(req, res, next) {
+        if (!req.params.id) {
+            throw new errorModule.BadRequestError('The user id is required');
+        }
+
         userService.getUserById(req.params.id).then((user) => {
             res.send(user);
             return next();
@@ -20,23 +23,29 @@ class UserController {
             return next(new restify.InternalServerError('', e));
         });
     }
-
     updateUser(req, res, next) {
-        userService.updateUser(req.user).then((user) => {
+        if(!req.params.id){
+            return next(new restify.BadRequestError("The user id is required."));
+        }
+
+        if(!req.body){
+            return next(new restify.BadRequestError("Missing user information."));
+        }
+
+        userService.updateUser(req.body).then((user) => {
             res.send(user);
             return next();
-        }).catch(function (e) {
+        }).catch((e) => {
             return next(new restify.InternalServerError('', e));
         });
     }
-
     createUser(req, res, next) {
-        userService.createUser(req.user).then((user) => {
+        userService.createUser(req.body).then((user) => {
             res.send(user);
             return next();
         }).catch(errorModule.BadRequestError, (e) => {
             return next(new restify.BadRequestError(e.message, e));
-        }).catch(function (e) {
+        }).catch((e) => {
             return next(new restify.InternalServerError('', e));
         });
     }

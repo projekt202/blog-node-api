@@ -15,16 +15,4 @@ class BadRequestError extends Error{
     }
 }
 
-class UnauthorizedError extends Error{
-    constructor(message){
-        super({message: message});
-
-        this.message = message;
-        this.name = 'UnauthorizedError';
-
-        Error.captureStackTrace(this, UnauthorizedError);
-    }
-}
-
 module.exports.BadRequestError = BadRequestError;
-module.exports.UnauthorizedError = UnauthorizedError;

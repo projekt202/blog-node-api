@@ -3,5 +3,13 @@
     "name": "Todo Services",
     "version": "1.0.0",
     "port": "3000"
+  },
+  "database": {
+    "username": "todo",
+    "password": "todo",
+    "name": "todo",
+    "host": "127.0.0.1",
+    "port": "3306",
+    "dialect": "mysql"
   }
 }

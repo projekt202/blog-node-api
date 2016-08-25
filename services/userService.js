@@ -3,46 +3,50 @@
  */
 
 'use strict';
-
 let errorModule = require('../errors');
-let _ = require('lodash');
+let Sequelize = require('sequelize');
+let Promise = require('bluebird');
+let ModelManager = require('../models');
+let modelManager = new ModelManager();
 
 class UserService {
     getUserById(id) {
-        if (!id || !_.isNumber(_.toNumber(id))) {
-            throw new errorModule.BadRequestError('id is required');
-        }
-
-        return new Promise((resolve) => {
-            resolve({id: id, emailAddress: 'test@gmail.com'});
+        return new Promise((resolve, reject) => {
+            return modelManager.models.user.findById(id)
+                .then((user) => {
+                    resolve(user);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
         });
     }
-
     updateUser(user) {
-        if (!user) {
-            throw new errorModule.BadRequestError('user is required');
-        }
-
-        return new Promise((resolve) => {
-            resolve(user);
+        return new Promise((resolve, reject) => {
+            return modelManager.models.user.update(user)
+                .then((updatedUser) => {
+                    resolve(updatedUser);
+                })
+                .catch(Sequelize.ValidationError, (error) => {
+                    reject(new errorModule.BadRequestError(error.message))
+                })
+                .catch((error) => {
+                    reject(error);
+                });
         });
     }
-
     createUser(user) {
-        if (!user.emailAddress) {
-            throw new errorModule.BadRequestError('email address is required');
-        }
-
-        if (!user.firstName) {
-            throw new errorModule.BadRequestError('first name is required');
-        }
-
-        if (!user.lastName) {
-            throw new errorModule.BadRequestError('last name is required');
-        }
-
-        return new Promise((resolve) => {
-            resolve(user);
+        return new Promise((resolve, reject) => {
+            return modelManager.models.user.create(user)
+                .then((createdUser) => {
+                    resolve(createdUser);
+                })
+                .catch(Sequelize.ValidationError, (error) => {
+                    reject(new errorModule.BadRequestError(error.message))
+                })
+                .catch((error) => {
+                    reject(error);
+                });
         });
     }
 }
