@@ -15,4 +15,16 @@ class BadRequestError extends Error{
     }
 }
 
+class ResourceNotFoundError extends Error{
+    constructor(message){
+        super({message: message});
+
+        this.message = message;
+        this.name = 'ResourceNotFoundError';
+
+        Error.captureStackTrace(this, ResourceNotFoundError);
+    }
+}
+
 module.exports.BadRequestError = BadRequestError;
+module.exports.ResourceNotFoundError = ResourceNotFoundError;

@@ -4,11 +4,11 @@
 'use strict';
 
 module.exports = function (sequelize, DataTypes) {
-   return sequelize.define("user", {
+   var user = sequelize.define("user", {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
-                defaultValue: DataTypes.INTEGER,
+                autoIncrement: true,
                 allowNull: false,
             },
             emailAddress: {
@@ -37,6 +37,18 @@ module.exports = function (sequelize, DataTypes) {
         },
         {
             timestamps: true,
-            freezeTableName: true
+            freezeTableName: true,
+            instanceMethods: {
+                associate: function(models) {
+                    user.hasMany(models.todo, {as: 'Todos',
+                        onDelete: 'CASCADE',
+                    foreignKey: {
+                        name: 'userId',
+                        allowNull: false
+                    }});
+                }
+            }
         });
+
+    return user;
 };

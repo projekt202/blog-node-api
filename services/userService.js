@@ -14,27 +14,40 @@ class UserService {
         return new Promise((resolve, reject) => {
             return modelManager.models.user.findById(id)
                 .then((user) => {
-                    resolve(user);
+                    if (!user) {
+                        reject(new errorModule.ResourceNotFoundError("User not found."));
+                    }
+                    else {
+                        resolve(user);
+                    }
                 })
                 .catch((error) => {
                     reject(error);
                 });
         });
     }
-    updateUser(user) {
+
+    updateUser(userId, updatedUser) {
         return new Promise((resolve, reject) => {
-            return modelManager.models.user.update(user)
-                .then((updatedUser) => {
-                    resolve(updatedUser);
-                })
-                .catch(Sequelize.ValidationError, (error) => {
-                    reject(new errorModule.BadRequestError(error.message))
+            return this.getUserById(userId)
+                .then((user) => {
+                    return user.updateAttributes(updatedUser)
+                        .then((user) => {
+                            resolve(user);
+                        })
+                        .catch(Sequelize.ValidationError, (error) => {
+                            reject(new errorModule.BadRequestError(error.message))
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        });
                 })
                 .catch((error) => {
                     reject(error);
                 });
         });
     }
+
     createUser(user) {
         return new Promise((resolve, reject) => {
             return modelManager.models.user.create(user)
