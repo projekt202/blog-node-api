@@ -11,14 +11,14 @@ module.exports = function (server) {
     let todoController = new TodoController();
 
     server.get({path: '/user/:userId/todo'}, restify.queryParser(),
-        todoController.getByUserId);
+        todoController.get);
 
     server.put({path: '/user/:userId/todo/:id'}, restify.queryParser(), restify.jsonBodyParser(),
-        todoController.updateTodo);
+        todoController.update);
 
     server.post({path: '/user/:userId/todo'}, restify.queryParser(), restify.jsonBodyParser(),
-        todoController.createTodo);
+        todoController.create);
 
     server.del({path: '/user/:userId/todo/:id'}, restify.queryParser(),
-        todoController.deleteTodo);
+        todoController.del);
 };

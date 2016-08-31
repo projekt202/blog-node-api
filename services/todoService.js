@@ -1,7 +1,6 @@
 /**
  * Created by reggie.samuel on 8/1/2016.
  */
-
 'use strict';
 let errorModule = require('../errors');
 let Sequelize = require('sequelize');
@@ -26,7 +25,6 @@ function getTodoByUserId(userId, todoId) {
             });
     });
 }
-
 class TodoService {
     getByUserId(userId) {
         return new Promise((resolve, reject) => {
@@ -98,5 +96,4 @@ class TodoService {
         });
     }
 }
-
 module.exports = TodoService;

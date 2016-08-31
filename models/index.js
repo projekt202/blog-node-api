@@ -29,20 +29,20 @@ _.chain(models)
         }
     }).value();
 
-class ModelManager{
-    constructor(){
-        if(instance){
+class ModelManager {
+    constructor() {
+        if (instance) {
             return instance;
         }
 
         instance = this;
     }
 
-    get models(){
+    get models() {
         return models;
     }
 
-    get db(){
+    get db() {
         return database;
     }
 }
