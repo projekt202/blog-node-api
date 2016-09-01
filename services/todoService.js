@@ -14,7 +14,7 @@ function getTodoByUserId(userId, todoId) {
         return modelManager.models.todo.findOne({where: {userId: userId, id: todoId}})
             .then((todo) => {
                 if (!todo) {
-                    reject(new errorModule.ResourceNotFoundError("Todo not found."));
+                    reject(new errorModule.ResourceNotFoundError('Todo not found.'));
                 }
                 else {
                     resolve(todo);
@@ -66,14 +66,14 @@ class TodoService {
                             resolve(createdTodo);
                         })
                         .catch(Sequelize.ValidationError, (error) => {
-                            reject(new errorModule.BadRequestError(error.message))
+                            reject(new errorModule.BadRequestError(error.message));
                         })
                         .catch((error) => {
                             reject(error);
                         });
                 })
                 .catch((error) => {
-                    resolve(error)
+                    resolve(error);
                 });
         });
     }

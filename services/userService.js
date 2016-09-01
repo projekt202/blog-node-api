@@ -15,7 +15,7 @@ class UserService {
             return modelManager.models.user.findById(id)
                 .then((user) => {
                     if (!user) {
-                        reject(new errorModule.ResourceNotFoundError("User not found."));
+                        reject(new errorModule.ResourceNotFoundError('User not found.'));
                     }
                     else {
                         resolve(user);
@@ -36,7 +36,7 @@ class UserService {
                             resolve(user);
                         })
                         .catch(Sequelize.ValidationError, (error) => {
-                            reject(new errorModule.BadRequestError(error.message))
+                            reject(new errorModule.BadRequestError(error.message));
                         })
                         .catch((error) => {
                             reject(error);
@@ -55,7 +55,7 @@ class UserService {
                     resolve(createdUser);
                 })
                 .catch(Sequelize.ValidationError, (error) => {
-                    reject(new errorModule.BadRequestError(error.message))
+                    reject(new errorModule.BadRequestError(error.message));
                 })
                 .catch((error) => {
                     reject(error);

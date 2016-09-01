@@ -1,3 +1,4 @@
+
 'use strict';
 
 let restify = require('restify');
@@ -9,7 +10,8 @@ let server = restify.createServer({name: config.server.name, version: config.ser
 try {
     server.use(restify.CORS()) //allows cross domain resource requests
         .use(restify.fullResponse()) //allows the use of POST requests
-        .use(restify.acceptParser(server.acceptable)) //parses out the accept header and ensures the server can respond to the client’s request
+        .use(restify.acceptParser(server.acceptable)) //parses out the accept header
+        // and ensures the server can respond to the client’s request
         .use(restify.queryParser()); //parses non-route values from the query string
 } catch (e) {
 
