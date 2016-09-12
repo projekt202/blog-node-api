@@ -1,7 +1,3 @@
-/**
- * Created by reggie.samuel on 8/25/2016.
- */
-
 'use strict';
 
 let database = require('./index');
