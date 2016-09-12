@@ -1,7 +1,3 @@
-/**
- * Created by reggie.samuel on 8/24/2016.
- */
-
 'use strict';
 
 let config = require('../config');
