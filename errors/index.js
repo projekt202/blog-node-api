@@ -1,7 +1,3 @@
-/**
- * Created by reggie.samuel on 8/1/2016.
- */
-
 'use strict';
 
 class BadRequestError extends Error{
