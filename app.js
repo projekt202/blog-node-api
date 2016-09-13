@@ -24,7 +24,7 @@ require('./routes')(server);
 
 server.listen(config.server.port || 3000, function () {
 
-    console.log('%s listening at %s', server.name, server.url);
+    console.log('%s is listening at %s', server.name, server.url);
 });
 
 module.exports.server = server;
