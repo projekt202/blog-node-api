@@ -6,12 +6,12 @@ module.exports = function (server) {
     let UserController = require('../controllers/userController');
     let userController = new UserController();
 
-    server.get({path: '/user/:id'}, restify.queryParser(),
+    server.get({path: '/users/:id'}, restify.queryParser(),
         userController.get);
 
-    server.put({path: '/user/:id'}, restify.queryParser(), restify.jsonBodyParser(),
+    server.put({path: '/users/:id'}, restify.queryParser(), restify.jsonBodyParser(),
         userController.update);
 
-    server.post({path: '/user'}, restify.jsonBodyParser(),
+    server.post({path: '/users'}, restify.jsonBodyParser(),
         userController.create);
 };

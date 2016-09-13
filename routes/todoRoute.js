@@ -10,15 +10,15 @@ module.exports = function (server) {
     let TodoController = require('../controllers/todoController');
     let todoController = new TodoController();
 
-    server.get({path: '/user/:userId/todo'}, restify.queryParser(),
+    server.get({path: '/users/:userId/todos'}, restify.queryParser(),
         todoController.get);
 
-    server.put({path: '/user/:userId/todo/:id'}, restify.queryParser(), restify.jsonBodyParser(),
+    server.put({path: '/users/:userId/todos/:id'}, restify.queryParser(), restify.jsonBodyParser(),
         todoController.update);
 
-    server.post({path: '/user/:userId/todo'}, restify.queryParser(), restify.jsonBodyParser(),
+    server.post({path: '/users/:userId/todos'}, restify.queryParser(), restify.jsonBodyParser(),
         todoController.create);
 
-    server.del({path: '/user/:userId/todo/:id'}, restify.queryParser(),
+    server.del({path: '/users/:userId/todos/:id'}, restify.queryParser(),
         todoController.del);
 };
