@@ -1,7 +1,7 @@
 'use strict';
 
-//dynamically require all routes declared in the routes folder
-function routeInitializor(server) {
+//Load all routes from the route directory
+function routeInitializer(server) {
     let requireDirectory = require('require-directory'),
         renamer = function (name) {
             return name.toLowerCase();
@@ -13,4 +13,4 @@ function routeInitializor(server) {
     return requireDirectory(module, {visit: visitor, rename: renamer});
 }
 
-module.exports = routeInitializor;
+module.exports = routeInitializer;
