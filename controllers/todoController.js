@@ -1,6 +1,3 @@
-/**
- * Created by reggie.samuel on 8/1/2016.
- */
 'use strict';
 let restify = require('restify');
 let TodoService = require('../services/todoService');

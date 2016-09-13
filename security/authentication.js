@@ -1,6 +1,3 @@
-/**
- * Created by reggie.samuel on 6/24/2016.
- */
 'use strict';
 
 function routeAuthenticator(){
