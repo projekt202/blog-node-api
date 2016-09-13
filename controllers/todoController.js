@@ -31,7 +31,7 @@ class TodoController {
             return next(new restify.BadRequestError('Missing todo information.'));
         }
 
-        todoService.updateTodo(req.params.userId, req.params.id, req.body)
+        todoService.update(req.params.userId, req.params.id, req.body)
             .then((user) => {
                 res.send(user);
                 return next();
@@ -56,7 +56,7 @@ class TodoController {
             return next(new restify.BadRequestError('Missing todo information.'));
         }
 
-        todoService.createTodo(req.params.userId, req.body)
+        todoService.create(req.params.userId, req.body)
             .then((todo) => {
                 res.send(todo);
                 return next();
@@ -77,7 +77,7 @@ class TodoController {
             return next(new restify.BadRequestError('The todo and user id\'s are required.'));
         }
 
-        todoService.deleteTodo(req.params.userId, req.params.id)
+        todoService.delete(req.params.userId, req.params.id)
             .then(() => {
                 res.send({});
                 return next();

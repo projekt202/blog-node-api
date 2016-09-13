@@ -5,8 +5,8 @@ let Promise = require('bluebird');
 let ModelManager = require('../models');
 let modelManager = new ModelManager();
 
-class UserService {
-    getUserById(id) {
+class UserService { 
+    getById(id) {
         return new Promise((resolve, reject) => {
             return modelManager.models.user.findById(id)
                 .then((user) => {
@@ -23,7 +23,7 @@ class UserService {
         });
     }
 
-    updateUser(userId, updatedUser) {
+    update(userId, updatedUser) {
         return new Promise((resolve, reject) => {
             return this.getUserById(userId)
                 .then((user) => {
@@ -44,7 +44,7 @@ class UserService {
         });
     }
 
-    createUser(user) {
+    create(user) {
         return new Promise((resolve, reject) => {
             return modelManager.models.user.create(user)
                 .then((createdUser) => {

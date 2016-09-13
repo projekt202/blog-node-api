@@ -9,7 +9,7 @@ class UserController {
             throw new errorModule.BadRequestError('The user id is required');
         }
 
-        userService.getUserById(req.params.id)
+        userService.getById(req.params.id)
             .then((user) => {
                 res.send(user);
                 return next();
@@ -34,7 +34,7 @@ class UserController {
             return next(new restify.BadRequestError('Missing user information.'));
         }
 
-        userService.updateUser(req.params.id, req.body)
+        userService.update(req.params.id, req.body)
             .then((user) => {
                 res.send(user);
                 return next();
@@ -48,7 +48,7 @@ class UserController {
     }
 
     create(req, res, next) {
-        userService.createUser(req.body)
+        userService.create(req.body)
             .then((user) => {
                 res.send(user);
                 return next();

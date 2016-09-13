@@ -35,7 +35,7 @@ class TodoService {
         });
     }
 
-    updateTodo(userId, todoId, updatedTodo) {
+    update(userId, todoId, updatedTodo) {
         return new Promise((resolve, reject) => {
             return getTodoByUserId(userId, todoId)
                 .then((todo) => {
@@ -53,7 +53,7 @@ class TodoService {
         });
     }
 
-    createTodo(userId, todo) {
+    create(userId, todo) {
         return new Promise((resolve, reject) => {
             return new UserService().getUserById(userId)
                 .then((user) => {
@@ -75,7 +75,7 @@ class TodoService {
         });
     }
 
-    deleteTodo(userId, todoId) {
+    delete(userId, todoId) {
         return new Promise((resolve, reject) => {
             return getTodoByUserId(userId, todoId)
                 .then((todo) => {
