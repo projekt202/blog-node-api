@@ -3,8 +3,7 @@
 let restify = require('restify');
 
 module.exports = function (server) {
-    let TodoController = require('../controllers/todoController');
-    let todoController = new TodoController();
+    let todoController = new (require('../controllers/todoController'));
 
     server.get({path: '/users/:userId/todos'}, restify.queryParser(),
         todoController.get);

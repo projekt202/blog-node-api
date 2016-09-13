@@ -3,8 +3,7 @@
 let restify = require('restify');
 
 module.exports = function (server) {
-    let UserController = require('../controllers/userController');
-    let userController = new UserController();
+    let userController = new (require('../controllers/userController'))();
 
     server.get({path: '/users/:id'}, restify.queryParser(),
         userController.get);
