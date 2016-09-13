@@ -14,7 +14,6 @@ try {
         // and ensures the server can respond to the client’s request
         .use(restify.queryParser()); //parses non-route values from the query string
 } catch (e) {
-
     process.exit(1);
     throw e;
 }
@@ -23,7 +22,6 @@ try {
 require('./routes')(server);
 
 server.listen(config.server.port || 3000, function () {
-
     console.log('%s is listening at %s', server.name, server.url);
 });
 
