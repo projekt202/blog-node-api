@@ -1,7 +1,6 @@
 'use strict';
 let restify = require('restify');
-let UserService = require('../services/userService');
-let userService = new UserService();
+let userService = new (require('../services/userService'));
 let errorModule = require('../errors');
 
 class UserController {

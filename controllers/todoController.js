@@ -1,7 +1,6 @@
 'use strict';
 let restify = require('restify');
-let TodoService = require('../services/todoService');
-let todoService = new TodoService();
+let todoService = new (require('../services/todoService'));
 let errorModule = require('../errors');
 
 class TodoController {
