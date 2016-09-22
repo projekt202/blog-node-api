@@ -21,4 +21,3 @@ exports.database = {
     port: process.env.DATABASE_PORT || nconf.get('database:port'),
     dialect: process.env.DATABASE_DIALECT || nconf.get('database:dialect')
 };
-

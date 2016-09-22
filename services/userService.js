@@ -1,46 +1,57 @@
 'use strict';
-let errorModule = require('../errors');
+
 let Sequelize = require('sequelize');
 let Promise = require('bluebird');
 let ModelManager = require('../models');
 let modelManager = new ModelManager();
+let serviceErrors = require('./serviceErrors');
 
-class UserService { 
+
+function cleanOutgoingUser(user){
+    if(!user)
+        return user;
+    delete user.dataValues.password;
+    return user;
+}
+
+class UserService {
     getById(id) {
         return new Promise((resolve, reject) => {
             return modelManager.models.user.findById(id)
                 .then((user) => {
-                    if (!user) {
-                        reject(new errorModule.ResourceNotFoundError('User not found.'));
-                    }
-                    else {
-                        resolve(user);
-                    }
+                    resolve(cleanOutgoingUser(user));
                 })
-                .catch((error) => {
-                    reject(error);
-                });
+                .catch(reject);
+        });
+    }
+
+    getPasswordForEmail(emailAddress, password) {
+        return new Promise((resolve, reject) => {
+            return modelManager.models.user.findOne({attributes: ['id', 'password'], where: {emailAddress: emailAddress}})
+                .then((user) => {
+                    resolve(user);
+                })
+                .catch(reject);
         });
     }
 
     update(userId, updatedUser) {
         return new Promise((resolve, reject) => {
-            return this.getUserById(userId)
+            return modelManager.models.user.findById(userId)
                 .then((user) => {
+                    if(!user)
+                        resolve(null);
+
                     return user.updateAttributes(updatedUser)
                         .then((user) => {
-                            resolve(user);
+                            resolve(cleanOutgoingUser(user));
                         })
-                        .catch(Sequelize.ValidationError, (error) => {
-                            reject(new errorModule.BadRequestError(error.message));
+                        .catch(Sequelize.ValidationError, (validationError) => {
+                            reject(new serviceErrors.ValidationError(validationError))
                         })
-                        .catch((error) => {
-                            reject(error);
-                        });
+                        .catch(reject);
                 })
-                .catch((error) => {
-                    reject(error);
-                });
+                .catch(reject);
         });
     }
 
@@ -48,14 +59,13 @@ class UserService {
         return new Promise((resolve, reject) => {
             return modelManager.models.user.create(user)
                 .then((createdUser) => {
-                    resolve(createdUser);
+                    resolve(cleanOutgoingUser(createdUser));
                 })
-                .catch(Sequelize.ValidationError, (error) => {
-                    reject(new errorModule.BadRequestError(error.message));
+                .catch(Sequelize.ValidationError, (validationError) => {
+                    reject(new serviceErrors.ValidationError(validationError))
+
                 })
-                .catch((error) => {
-                    reject(error);
-                });
+                .catch(reject);
         });
     }
 }

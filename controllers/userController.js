@@ -2,6 +2,9 @@
 let restify = require('restify');
 let userService = new (require('../services/userService'))();
 let errorModule = require('../errors');
+let serviceErrors = require('../services/serviceErrors');
+let controllerErrors = require('./controllerErrors');
+
 
 class UserController {
     get(req, res, next) {
@@ -11,17 +14,14 @@ class UserController {
 
         userService.getById(req.params.id)
             .then((user) => {
+                if(!user)
+                    return next(new controllerErrors.ResourceNotFoundError());
+
                 res.send(user);
                 return next();
             })
-            .catch(errorModule.BadRequestError, (e) => {
-                return next(new restify.BadRequestError(e.message, e));
-            })
-            .catch(errorModule.ResourceNotFoundError, (e) => {
-                return next(new restify.ResourceNotFoundError(e.message, e));
-            })
             .catch((e) => {
-                return next(new restify.InternalServerError(e.message, e));
+                return next(new controllerErrors.InternalServerError(e));
             });
     }
 
@@ -36,14 +36,17 @@ class UserController {
 
         userService.update(req.params.id, req.body)
             .then((user) => {
+                if(!user)
+                    return next(new controllerErrors.ResourceNotFoundError());
+
                 res.send(user);
                 return next();
             })
-            .catch(errorModule.ResourceNotFoundError, (e) => {
-                return next(new restify.ResourceNotFoundError(e.message, e));
+            .catch(serviceErrors.ValidationError, (e) => {
+                    return next(new controllerErrors.BadRequestError(e));
             })
             .catch((e) => {
-                return next(new restify.InternalServerError(e.message, e));
+                return next(new controllerErrors.InternalServerError(e));
             });
     }
 
@@ -53,11 +56,11 @@ class UserController {
                 res.send(user);
                 return next();
             })
-            .catch(errorModule.BadRequestError, (e) => {
-                return next(new restify.BadRequestError(e.message, e));
+            .catch(serviceErrors.ValidationError, (e) => {
+                return next(new controllerErrors.BadRequestError(e));
             })
             .catch((e) => {
-                return next(new restify.InternalServerError(e.message, e));
+                return next(new controllerErrors.InternalServerError(e));
             });
     }
 }

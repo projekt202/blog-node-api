@@ -1,11 +1,14 @@
 'use strict';
 
 class BadRequestError extends Error{
-    constructor(message){
+    constructor(message, details){
         super({message: message});
+
+        console.log(details);
 
         this.message = message;
         this.name = 'BadRequestError';
+        this.details = details;
 
         Error.captureStackTrace(this, BadRequestError);
     }

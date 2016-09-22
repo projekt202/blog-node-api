@@ -43,6 +43,9 @@ class TodoService {
                         .then((todo) => {
                             resolve(todo);
                         })
+                        .catch(Sequelize.ValidationError, (error) => {
+                                reject(new errorModule.BadRequestError(error.toFriendlyError()));
+                        })
                         .catch((error) => {
                             resolve(error);
                         });
@@ -63,7 +66,7 @@ class TodoService {
                             resolve(createdTodo);
                         })
                         .catch(Sequelize.ValidationError, (error) => {
-                            reject(new errorModule.BadRequestError(error.message));
+                            reject(new errorModule.BadRequestError(error.toFriendlyError()));
                         })
                         .catch((error) => {
                             reject(error);
