@@ -32,22 +32,21 @@ class ClaimService {
         });
     }
 
-
     validateToken(token){
         return new Promise((resolve, reject) => {
             return modelManager.models.claim.findOne({where: {token: token}})
                 .then((claim) => {
                     if(!claim){
-                        resolve(false);
+                        resolve({isValid:false});
                         return;
                     }
                     let signingKey = Buffer.from(claim.signingKey, 'base64');
 
                     nJwt.verify(token, signingKey, (err,verifiedJwt) => {
                         if(err){
-                            resolve(false); // Token has expired, has been tampered with, etc
+                            resolve({isValid:false}); // Token has expired, has been tampered with, etc
                         }else{
-                            resolve(true);
+                            resolve({isValid:true, userId: claim.userId});
                         }
                     });
 

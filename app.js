@@ -2,7 +2,8 @@
 
 let restify = require('restify');
 let config = require('./config');
-let authenticate = require('./security/authentication');
+let authentication = require('./security/authentication');
+let authorization = require('./security/authorization');
 
 //Restify api server
 let server = restify.createServer({name: config.server.name, version: config.server.version});
@@ -21,8 +22,10 @@ try {
         .use(restify.fullResponse()) //allows the use of POST requests
         .use(restify.acceptParser(server.acceptable)) //parses out the accept header and ensures the server can respond to the client’s request
         .use(restify.queryParser()) //parses non-route values from the query string
-        .use(authenticate)
+        .use(authentication)
+        .use(authorization(server))
 } catch (e) {
+    console.log('Cannot start server', e)
     process.exit(1);
     throw e;
 }

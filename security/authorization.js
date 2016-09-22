@@ -1,12 +1,18 @@
 'use strict';
 
-function routeAuthorizor(){
-    function authorizeRouteRequest(request, response, next){
-        //authentication logic here, if successful next() proceeds to next function in chain. if not just return
+
+function authorize(server) {
+
+    function authorizeRequest(req, res, next) {
+        let route = server.router.routes[req.method].filter(r => r.spec.path === req.route.path);
+
+        console.log(route);
+
+        var isAnonymous = !route.spec.roles;
         return next();
     }
 
-    return(authorizeRouteRequest);
+    return (authorizeRequest);
 }
 
-module.exports = routeAuthorizor;
+module.exports = authorize;
