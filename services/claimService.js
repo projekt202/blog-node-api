@@ -33,9 +33,7 @@ class ClaimService {
     }
 
 
-
     validateToken(token){
-        let getByToken = this.getByToken;
         return new Promise((resolve, reject) => {
             return modelManager.models.claim.findOne({where: {token: token}})
                 .then((claim) => {
@@ -47,7 +45,6 @@ class ClaimService {
 
                     nJwt.verify(token, signingKey, (err,verifiedJwt) => {
                         if(err){
-                            console.log(err);
                             resolve(false); // Token has expired, has been tampered with, etc
                         }else{
                             resolve(true);
@@ -68,8 +65,8 @@ class ClaimService {
 
         let signingKey = secureRandom(256, {type: 'Buffer'});
         let jwt = nJwt.create(claims,signingKey);
-        //let expirationDate = new Date().getTime() + (120*60*1000); // Two hours from now.  TODO: Get from config
-        //jwt.setExpiration(expirationDate);
+        let expirationDate = new Date().getTime() + (120*60*1000); // Two hours from now.  TODO: Get from config
+        jwt.body.exp = expirationDate;
 
         return {
             signingKey: signingKey.toString('base64'),
