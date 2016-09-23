@@ -10,39 +10,39 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false,
         },
         emailAddress: {
-            type: DataTypes.STRING(50),
+            type: DataTypes.STRING(255),
             allowNull: false,
             unique: true,
             validate: {
                 isEmail: true,
-                max: 50
+                max: 255
             }
         },
         firstName: {
-            type: DataTypes.STRING(50),
+            type: DataTypes.STRING(100),
             allowNull: false,
             validate: {
                 notEmpty: true,
-                max: 50
+                max: 100
             }
         },
         lastName: {
-            type: DataTypes.STRING(50),
+            type: DataTypes.STRING(100),
             allowNull: false,
             validate: {
                 notEmpty: true,
-                max: 50
+                max: 100
             }
         },
         password: {
-            type: DataTypes.STRING(1000),
+            type: DataTypes.STRING(1024),
             allowNull: false,
             set      : function(val) {
                 this.setDataValue('password', passwordHash.generate(val));
             },
             validate: {
                 notEmpty: true,
-                max: 100
+                max: 1024
             }
         }
     },

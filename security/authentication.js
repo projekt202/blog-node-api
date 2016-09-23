@@ -11,10 +11,13 @@ function authenticate(req, res, next) {
     }
 
     /*If there isn't an api-key header then they aren't authenticated*/
-    var apiKey = req.header('api-key');
+    var apiKey = req.header('Authorization');
     if(!apiKey){
+        res.header('WWW-Authenticate','Bearer api-key'); /*RFC7235, Section 3.1*/
         res.send(401)
+        return next(false);
     }
+    apiKey = apiKey.replace('Bearer', '').trim();
 
     /*Validate the token*/
     claimService.validateToken(apiKey)
@@ -38,9 +41,14 @@ function authenticate(req, res, next) {
                     return next();
                 })
                 .catch((e)=>{
-                    /* Some error happened, TODO: log it */
+                    /* Some error happened */
+                    console.log('Unable to get a user', e)
                     res.send(401);
                 });
+        })
+        .catch((e)=>{
+            throw e;
+
         });
 }
 

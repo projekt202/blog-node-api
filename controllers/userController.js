@@ -1,18 +1,16 @@
 'use strict';
-let restify = require('restify');
+
 let userService = new (require('../services/userService'))();
-let errorModule = require('../errors');
 let serviceErrors = require('../services/serviceErrors');
 let controllerErrors = require('./controllerErrors');
 
-
 class UserController {
     get(req, res, next) {
-        if (!req.params.id) {
+        if (!req.params.userId) {
             throw new errorModule.BadRequestError('The user id is required');
         }
 
-        userService.getById(req.params.id)
+        userService.getById(req.params.userId)
             .then((user) => {
                 if(!user)
                     return next(new controllerErrors.ResourceNotFoundError());
@@ -20,21 +18,19 @@ class UserController {
                 res.send(user);
                 return next();
             })
-            .catch((e) => {
-                return next(new controllerErrors.InternalServerError(e));
-            });
+            .catch(next);
     }
 
     update(req, res, next) {
-        if (!req.params.id) {
-            return next(new restify.BadRequestError('The user id is required.'));
+        if (!req.params.userId) {
+            return next(new controllerErrors.BadRequestError('The user id is required.'));
         }
 
         if (!req.body) {
-            return next(new restify.BadRequestError('Missing user information.'));
+            return next(new controllerErrors.BadRequestError('Missing user information.'));
         }
 
-        userService.update(req.params.id, req.body)
+        userService.update(req.params.userId, req.body)
             .then((user) => {
                 if(!user)
                     return next(new controllerErrors.ResourceNotFoundError());
@@ -43,11 +39,9 @@ class UserController {
                 return next();
             })
             .catch(serviceErrors.ValidationError, (e) => {
-                    return next(new controllerErrors.BadRequestError(e));
+                    return next(new controllerErrors.ValidationError(e));
             })
-            .catch((e) => {
-                return next(new controllerErrors.InternalServerError(e));
-            });
+            .catch(next);
     }
 
     create(req, res, next) {
@@ -57,11 +51,9 @@ class UserController {
                 return next();
             })
             .catch(serviceErrors.ValidationError, (e) => {
-                return next(new controllerErrors.BadRequestError(e));
+                return next(new controllerErrors.ValidationError(e));
             })
-            .catch((e) => {
-                return next(new controllerErrors.InternalServerError(e));
-            });
+            .catch(next);
     }
 }
 

@@ -2,23 +2,22 @@
 
 let restify = require('restify');
 
-class UnauthorizedError extends restify.UnauthorizedError{
-    constructor(){
-        super();
-
-        this.body.code = this.statusCode;
-        this.body.message = 'Unauthorized';
-
-        Error.captureStackTrace(this, UnauthorizedError);
-    }
-}
-
-class BadRequestError extends restify.BadRequestError{
+class ValidationError extends restify.BadRequestError{
     constructor(serviceValidationError){
         super({message: serviceValidationError.message});
 
         this.body.code = this.statusCode;
         this.body.details = serviceValidationError.details;
+
+        Error.captureStackTrace(this, ValidationError);
+    }
+}
+
+class BadRequestError extends restify.BadRequestError{
+    constructor(message){
+        super({message: message});
+
+        this.body.code = 'InvalidInput';
 
         Error.captureStackTrace(this, BadRequestError);
     }
@@ -27,16 +26,10 @@ class BadRequestError extends restify.BadRequestError{
 class ResourceNotFoundError extends restify.ResourceNotFoundError{
     constructor(){
         super({message: 'Resource not found'});
-        this.body.code = this.statusCode;
-        Error.captureStackTrace(this, ResourceNotFoundError);
-    }
-}
 
-class InternalServerError extends restify.InternalServerError{
-    constructor(serverError){
-        super({message: serverError.message});
-        this.body.code = this.statusCode;
-        Error.captureStackTrace(this, InternalServerError);
+        this.body.code = 'ResourceNotFound';
+
+        Error.captureStackTrace(this, ResourceNotFoundError);
     }
 }
 
@@ -44,6 +37,4 @@ module.exports.BadRequestError = BadRequestError;
 
 module.exports.ResourceNotFoundError = ResourceNotFoundError;
 
-module.exports.InternalServerError = InternalServerError;
-
-module.exports.UnauthorizedError = UnauthorizedError;
+module.exports.ValidationError = ValidationError;

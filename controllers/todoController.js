@@ -1,7 +1,8 @@
 'use strict';
+
 let restify = require('restify');
 let todoService = new (require('../services/todoService'))();
-let errorModule = require('../errors');
+let controllerErrors = require('./controllerErrors');
 
 class TodoController {
     get(req, res, next) {
@@ -11,6 +12,9 @@ class TodoController {
 
         todoService.getByUserId(req.params.userId)
             .then((todos) => {
+                if(!todos)
+                    return next(new controllerErrors.ResourceNotFoundError());
+
                 res.send(todos);
                 return next();
             })

@@ -1,37 +1,28 @@
 'use strict';
-let errorModule = require('../errors');
+
 let Sequelize = require('sequelize');
 let Promise = require('bluebird');
 let ModelManager = require('../models');
 let modelManager = new ModelManager();
 let UserService = require('./userService');
+let serviceErrors = require('./serviceErrors');
 
 function getTodoByUserId(userId, todoId) {
     return new Promise((resolve, reject) => {
         return modelManager.models.todo.findOne({where: {userId: userId, id: todoId}})
             .then((todo) => {
-                if (!todo) {
-                    reject(new errorModule.ResourceNotFoundError('Todo not found.'));
-                }
-                else {
-                    resolve(todo);
-                }
+                resolve(todo);
             })
-            .catch((error) => {
-                reject(error);
-            });
+            .catch(reject);
     });
 }
+
 class TodoService {
     getByUserId(userId) {
         return new Promise((resolve, reject) => {
             return modelManager.models.todo.findAll({where: {userId: userId}})
-                .then((todos) => {
-                    resolve(todos);
-                })
-                .catch((error) => {
-                    reject(error);
-                });
+                .then(resolve)
+                .catch(reject);
         });
     }
 
@@ -40,19 +31,13 @@ class TodoService {
             return getTodoByUserId(userId, todoId)
                 .then((todo) => {
                     return todo.updateAttributes(updatedTodo)
-                        .then((todo) => {
-                            resolve(todo);
-                        })
+                        .then(resolve)
                         .catch(Sequelize.ValidationError, (error) => {
-                                reject(new errorModule.BadRequestError(error.toFriendlyError()));
+                            reject(new serviceErrors.ValidationError(error));
                         })
-                        .catch((error) => {
-                            resolve(error);
-                        });
+                        .catch(reject);
                 })
-                .catch((error => {
-                    reject(error);
-                }));
+                .catch(reject);
         });
     }
 
@@ -62,19 +47,13 @@ class TodoService {
                 .then((user) => {
                     todo.userId = user.id;
                     return modelManager.models.todo.create(todo)
-                        .then((createdTodo) => {
-                            resolve(createdTodo);
-                        })
+                        .then(resolve)
                         .catch(Sequelize.ValidationError, (error) => {
-                            reject(new errorModule.BadRequestError(error.toFriendlyError()));
+                            reject(new serviceErrors.ValidationError(error));
                         })
-                        .catch((error) => {
-                            reject(error);
-                        });
+                        .catch(reject);
                 })
-                .catch((error) => {
-                    resolve(error);
-                });
+                .catch(reject);
         });
     }
 
@@ -83,16 +62,10 @@ class TodoService {
             return getTodoByUserId(userId, todoId)
                 .then((todo) => {
                     return todo.destroy()
-                        .then(() => {
-                            resolve();
-                        })
-                        .catch((error) => {
-                            resolve(error);
-                        });
+                        .then(resolve)
+                        .catch(resolve);
                 })
-                .catch((error => {
-                    reject(error);
-                }));
+                .catch(reject);
         });
     }
 }

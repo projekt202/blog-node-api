@@ -28,9 +28,7 @@ class UserService {
     getPasswordForEmail(emailAddress, password) {
         return new Promise((resolve, reject) => {
             return modelManager.models.user.findOne({attributes: ['id', 'password'], where: {emailAddress: emailAddress}})
-                .then((user) => {
-                    resolve(user);
-                })
+                .then(resolve)
                 .catch(reject);
         });
     }

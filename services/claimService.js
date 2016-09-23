@@ -64,7 +64,7 @@ class ClaimService {
 
         let signingKey = secureRandom(256, {type: 'Buffer'});
         let jwt = nJwt.create(claims,signingKey);
-        let expirationDate = new Date().getTime() + (120*60*1000); // Two hours from now.  TODO: Get from config
+        let expirationDate = new Date().getTime() + (120*60*1000); // Two hours from now.
         jwt.body.exp = expirationDate;
 
         return {

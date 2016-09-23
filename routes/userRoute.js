@@ -5,10 +5,10 @@ let restify = require('restify');
 module.exports = function (server) {
     let userController = new (require('../controllers/userController'))();
 
-    server.get({path: '/users/:id'}, restify.queryParser(),
+    server.get({path: '/users/:userId'}, restify.queryParser(),
         userController.get);
 
-    server.put({path: '/users/:id'}, restify.queryParser(), restify.jsonBodyParser(),
+    server.put({path: '/users/:userId'}, restify.queryParser(), restify.jsonBodyParser(),
         userController.update);
 
     server.post({path: '/users'}, restify.jsonBodyParser(),

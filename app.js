@@ -8,15 +8,6 @@ let authorization = require('./security/authorization');
 //Restify api server
 let server = restify.createServer({name: config.server.name, version: config.server.version});
 
-function handleInternalServerErrors(request, response, next){
-    if (response.statusCode == 500) {
-        //TODO: Log the actual error before replaceing the message
-        response.send(500, 'Internal Server Error')
-    }
-
-    next();
-}
-
 try {
     server.use(restify.CORS()) //allows cross domain resource requests
         .use(restify.fullResponse()) //allows the use of POST requests
@@ -24,6 +15,7 @@ try {
         .use(restify.queryParser()) //parses non-route values from the query string
         .use(authentication)
         .use(authorization(server))
+
 } catch (e) {
     console.log('Cannot start server', e)
     process.exit(1);
@@ -34,11 +26,18 @@ try {
 require('./routes')(server);
 
 
-server.use(handleInternalServerErrors);
+/*Handle all uncaught exceptions.  These will be turned into 500 Internal Server Error responses and the details not leaked to the client*/
+server.on('uncaughtException', function(request, response, route, error) {
+    console.log('Exception thrown \n %s', error.stack);
+    response.send(500, {code: 'InternalServerError', message: 'An internal server error occurred'})
+    return ;
+});
+
 
 server.listen(config.server.port || 3000, function () {
     console.log('%s is listening at %s', server.name, server.url);
 });
+
 
 
 
@@ -60,8 +59,8 @@ server.on('after', function (request, response, route, error) {
             stack: (error && error.stack) ? error.stack : null,
             response: response
         };
-
-        console.log(errData)
+        console.log('after');
+        //console.log(errData)
     }
 });
 
