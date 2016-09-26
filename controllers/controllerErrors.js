@@ -6,7 +6,7 @@ class ValidationError extends restify.BadRequestError{
     constructor(serviceValidationError){
         super({message: serviceValidationError.message});
 
-        this.body.code = this.statusCode;
+        this.body.code = 'InvalidInput';
         this.body.details = serviceValidationError.details;
 
         Error.captureStackTrace(this, ValidationError);
