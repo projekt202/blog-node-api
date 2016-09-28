@@ -7,7 +7,7 @@ let controllerErrors = require('./controllerErrors');
 class UserController {
     get(req, res, next) {
         if (!req.params.userId) {
-            throw new errorModule.BadRequestError('The user id is required');
+            throw new controllerErrors.BadRequestError('The user id is required');
         }
 
         userService.getById(req.params.userId)
@@ -39,7 +39,7 @@ class UserController {
                 return next();
             })
             .catch(serviceErrors.ValidationError, (e) => {
-                    return next(new controllerErrors.ValidationError(e));
+                return next(new controllerErrors.ValidationError(e));
             })
             .catch(next);
     }

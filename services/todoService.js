@@ -4,7 +4,6 @@ let Sequelize = require('sequelize');
 let Promise = require('bluebird');
 let ModelManager = require('../models');
 let modelManager = new ModelManager();
-let UserService = require('./userService');
 let serviceErrors = require('./serviceErrors');
 
 function getTodoByUserId(userId, todoId) {
@@ -42,16 +41,12 @@ class TodoService {
     }
 
     create(userId, todo) {
+        todo.userId = userId;
         return new Promise((resolve, reject) => {
-            return new UserService().getUserById(userId)
-                .then((user) => {
-                    todo.userId = user.id;
-                    return modelManager.models.todo.create(todo)
-                        .then(resolve)
-                        .catch(Sequelize.ValidationError, (error) => {
-                            reject(new serviceErrors.ValidationError(error));
-                        })
-                        .catch(reject);
+            return modelManager.models.todo.create(todo)
+                .then(resolve)
+                .catch(Sequelize.ValidationError, (error) => {
+                    reject(new serviceErrors.ValidationError(error));
                 })
                 .catch(reject);
         });

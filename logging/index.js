@@ -37,28 +37,40 @@ class Logger {
         return this.log('error', message, data);
     }
 
-    webError(request, response, route, error){
-        return this.log('error', error.name || error.message,   this.__toLogData(request, response, route, error))
+    processError(error, process, config){
+        return this.log('error', `${error.name} : ${error.message}`, {
+            name: 'ProcessException',
+            stack: error.stack,
+            process: process,
+            config: config
+        });
     }
 
-    __toLogData(request, response, route, error){
-        return {
-            
+    webError(request, response, route, error){
+        return this.log('error', error.name || error.message, this.__toWebLogData(request, response, route, error));
+    }
 
-            url: request.getPath() ? request.getPath() : null,
-            statusCode: response.statusCode ? response.statusCode : null,
-            method: request.method ? request.method : null,
-            route: request.route ? request.route : null,
-            params: request.params ? request.params : null,
-            query: request.getQuery(),
-            httpVersion: request.httpVersion ? request.httpVersion : null,
-            headers: request.headers ? request.headers : null,
-            //accountId: request.account ? request.account.id : null,
-            requestBody: request.body ? request.body : null,
-            //responseBody: response._data ? response._data : null,
-            errorMessage: (error && error.message) ? error.message : null,
-            stack: (error && error.stack) ? error.stack : null,
-            response: response
+    __toWebLogData(request, response, route, error){
+        return {
+            request: {
+                path: (route && route.path) ? route.path : null,
+                url: (request && request.url) ? request.url : null,
+                method: (request && request.method) ? request.method : null,
+                params: (request && request.params) ? request.params : null,
+                body: (request && request.body) ? request.body : null,
+                headers: (request && request.headers) ? request.headers : null,
+                query: (request) ? request.getQuery() : null,
+                httpVersion: (request && request.httpVersion) ? request.httpVersion : null,
+            },
+            response: {
+                statusCode: response.statusCode,
+            },
+            error: {
+                message: (error && error.message) ? error.message : null,
+                stack: (error && error.stack) ? error.stack : null,
+                sql: (error && error.sql) ? error.sql : null,
+                code: (error && error.original) ? error.original.code : null
+            }
         }
     }
 }

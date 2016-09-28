@@ -15,7 +15,7 @@ module.exports = function (sequelize, DataTypes) {
                 max: 50
             }
         }, content: {
-            type: DataTypes.STRING(100),
+            type: DataTypes.STRING(255),
             allowNull: false,
             validate: {
                 notEmpty: true,

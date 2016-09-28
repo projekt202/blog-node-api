@@ -2,12 +2,13 @@
 
 let restify = require('restify');
 let todoService = new (require('../services/todoService'))();
+let serviceErrors = require('../services/serviceErrors');
 let controllerErrors = require('./controllerErrors');
 
 class TodoController {
     get(req, res, next) {
         if (!req.params.userId) {
-            throw new errorModule.BadRequestError('The user id is required.');
+            throw new controllerErrors.BadRequestError('The user id is required.');
         }
 
         todoService.getByUserId(req.params.userId)
@@ -18,12 +19,7 @@ class TodoController {
                 res.send(todos);
                 return next();
             })
-            .catch(errorModule.BadRequestError, (e) => {
-                return next(new restify.BadRequestError(e.message, e));
-            })
-            .catch((e) => {
-                return next(new restify.InternalServerError(e.message, e));
-            });
+            .catch(next);
     }
 
     update(req, res, next) {
@@ -40,15 +36,10 @@ class TodoController {
                 res.send(user);
                 return next();
             })
-            .catch(errorModule.BadRequestError, (e) => {
-                return next(new restify.BadRequestError(e.message, e));
+            .catch(serviceErrors.ValidationError, (e) => {
+                return next(new controllerErrors.ValidationError(e));
             })
-            .catch(errorModule.ResourceNotFoundError, (e) => {
-                return next(new restify.ResourceNotFoundError(e.message, e));
-            })
-            .catch((e) => {
-                return next(new restify.InternalServerError(e.message, e));
-            });
+            .catch(next);
     }
 
     create(req, res, next) {
@@ -65,15 +56,10 @@ class TodoController {
                 res.send(todo);
                 return next();
             })
-            .catch(errorModule.BadRequestError, (e) => {
-                return next(new restify.BadRequestError(e.message, e));
+            .catch(serviceErrors.ValidationError, (e) => {
+                return next(new controllerErrors.ValidationError(e));
             })
-            .catch(errorModule.ResourceNotFoundError, (e) => {
-                return next(new restify.ResourceNotFoundError(e.message, e));
-            })
-            .catch((e) => {
-                return next(new restify.InternalServerError(e.message, e));
-            });
+            .catch(next);
     }
 
     del(req, res, next) {
@@ -86,12 +72,7 @@ class TodoController {
                 res.send({});
                 return next();
             })
-            .catch(errorModule.ResourceNotFoundError, (e) => {
-                return next(new restify.ResourceNotFoundError(e.message, e));
-            })
-            .catch((e) => {
-                return next(new restify.InternalServerError(e.message, e));
-            });
+            .catch(next);
     }
 }
 

@@ -5,7 +5,7 @@ let userService = new (require('../services/userService'))();
 function authenticate(server) {
     var server = server;
 
-    function unauthorized(){
+    function unauthorized(res, next){
         res.send(401)
         return next(false);
     }
@@ -22,7 +22,7 @@ function authenticate(server) {
         var apiKey = req.header('Authorization');
         if(!apiKey){
             res.header('WWW-Authenticate','Bearer api-key'); /*RFC7235, Section 3.1*/
-            return unauthorized();
+            return unauthorized(res, next);
         }
         apiKey = apiKey.replace('Bearer', '').trim();
 
@@ -32,7 +32,7 @@ function authenticate(server) {
 
                 /*If it's not valid then they aren't authenticated.*/
                 if(!result.isValid){
-                    return unauthorized();
+                    return unauthorized(res, next);
                 }
 
                 /*Get the user and attach it to the request*/
@@ -40,15 +40,15 @@ function authenticate(server) {
                     .then((user)=>{
                         if(!user){
                             /*No user so they aren't authenticated (shouldn't ever happen)*/
-                            return unauthorized();
+                            return unauthorized(res, next);
                         }
                         req.user = user;
                         return next();
                     })
                     .catch((e)=>{
-                        /* Some error happened */
-                        console.log('Unable to get a user', e)
-                        return unauthorized();
+                        /*Manually emit the uncaught exception event because we are in a promise.*/
+                        server.emit('uncaughtException', req, res, req.route, e);
+                        next(false);
                     });
             })
             .catch((e)=>{
