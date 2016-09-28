@@ -26,12 +26,16 @@ try {
     server.use(restify.CORS()) //allows cross domain resource requests
         .use(restify.fullResponse()) //allows the use of POST requests
         .use(restify.acceptParser(server.acceptable)) //parses out the accept header and ensures the server can respond to the client’s request
-        .use(restify.queryParser()) //parses non-route values from the query string
-        //.use(authentication(server))
-        //.use(authorization(server))
+        .use(restify.queryParser()); //parses non-route values from the query string
+
+    /*Enable security if set*/
+    if(config.server.enableSecurity){
+        server.use(authentication(server))
+            .use(authorization(server));
+    }
 } catch (e) {
     logging.error('Cannot start server', e)
-    process.exit(1);
+    process.nextTick( process.exit(1) );
     throw e;
 }
 
@@ -46,7 +50,7 @@ server.on('uncaughtException', (request, response, route, error) => {
 });
 
 /*Start listening*/
-server.listen(config.server.port || 3000, function () {
+server.listen(config.server.port, function () {
     logging.info(`${server.name} is listening at ${server.url}`);
 });
 
