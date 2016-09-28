@@ -63,13 +63,13 @@ class TodoController {
     }
 
     del(req, res, next) {
-        if (!req.params.id || !req.params.userId) {
+        if (!req.params.todoId || !req.params.userId) {
             return next(new restify.BadRequestError('The todo and user id\'s are required.'));
         }
 
-        todoService.delete(req.params.userId, req.params.id)
+        todoService.delete(req.params.userId, req.params.todoId)
             .then(() => {
-                res.send({});
+                res.send(200);
                 return next();
             })
             .catch(next);

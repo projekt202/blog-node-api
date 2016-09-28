@@ -1,19 +1,17 @@
 'use strict';
 
-let restify = require('restify');
-
 module.exports = function (server) {
     let todoController = new (require('../controllers/todoController'));
 
-    server.get({path: '/users/:userId/todos'}, restify.queryParser(),
+    server.get({path: '/users/:userId/todos'},
         todoController.get);
 
-    server.put({path: '/users/:userId/todos/:todoId'}, restify.queryParser(), restify.jsonBodyParser(),
+    server.put({path: '/users/:userId/todos/:todoId'},
         todoController.update);
 
-    server.post({path: '/users/:userId/todos'}, restify.queryParser(), restify.jsonBodyParser(),
+    server.post({path: '/users/:userId/todos'},
         todoController.create);
 
-    server.del({path: '/users/:userId/todos/:todoId'}, restify.queryParser(),
+    server.del({path: '/users/:userId/todos/:todoId'},
         todoController.del);
 };

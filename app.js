@@ -19,27 +19,24 @@ process.on('uncaughtException', function (err) {
     }
 });
 
-//*Setup the restify api server*/
+/*Create the restify api server*/
 let server = restify.createServer({name: config.server.name, version: config.server.version});
+server.pre(restify.pre.sanitizePath());
 
-try {
-    server.use(restify.CORS()) //allows cross domain resource requests
-        .use(restify.fullResponse()) //allows the use of POST requests
-        .use(restify.acceptParser(server.acceptable)) //parses out the accept header and ensures the server can respond to the client’s request
-        .use(restify.queryParser()); //parses non-route values from the query string
+/*Configure the server middleware*/
+server.use(restify.CORS()) /*allows cross domain resource requests*/
+    .use(restify.fullResponse()) /*allows the use of POST requests*/
+    .use(restify.acceptParser(server.acceptable)) /*parses out the accept header and ensures the server can respond to the client’s request*/
+    .use(restify.queryParser()) /*parses non-route values from the query string*/
+    .use(restify.bodyParser())  /*parses the body based on the content-type header*/
 
-    /*Enable security if set*/
-    if(config.server.enableSecurity){
-        server.use(authentication(server))
-            .use(authorization(server));
-    }
-} catch (e) {
-    logging.error('Cannot start server', e)
-    process.nextTick( process.exit(1) );
-    throw e;
+/*Enable security middleware if set in the config*/
+if(config.server.enableSecurity){
+    server.use(authentication(server))
+        .use(authorization(server));
 }
 
-/*Initialize Routes*/
+/*Create all the routes for the server*/
 require('./routes')(server);
 
 /*Handle all uncaught exceptions.  These will be turned into 500 Internal Server Error responses and the details not leaked to the client*/

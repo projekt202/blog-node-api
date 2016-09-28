@@ -1,16 +1,14 @@
 'use strict';
 
-let restify = require('restify');
-
 module.exports = function (server) {
     let userController = new (require('../controllers/userController'))();
 
-    server.get({path: '/users/:userId'}, restify.queryParser(),
+    server.get({path: '/users/:userId'},
         userController.get);
 
-    server.put({path: '/users/:userId'}, restify.queryParser(), restify.jsonBodyParser(),
+    server.put({path: '/users/:userId'},
         userController.update);
 
-    server.post({path: '/users'}, restify.jsonBodyParser(),
+    server.post({path: '/users'},
         userController.create);
 };

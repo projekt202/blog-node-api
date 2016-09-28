@@ -6,10 +6,13 @@ let controllerErrors = require('./controllerErrors');
 
 class UserController {
     get(req, res, next) {
+
+        /*Verify a userId was passed in*/
         if (!req.params.userId) {
             throw new controllerErrors.BadRequestError('The user id is required');
         }
 
+        /*Get the user*/
         userService.getById(req.params.userId)
             .then((user) => {
                 if(!user)

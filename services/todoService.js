@@ -56,6 +56,9 @@ class TodoService {
         return new Promise((resolve, reject) => {
             return getTodoByUserId(userId, todoId)
                 .then((todo) => {
+                    if(!todo){
+                        resolve();
+                    }
                     return todo.destroy()
                         .then(resolve)
                         .catch(resolve);
