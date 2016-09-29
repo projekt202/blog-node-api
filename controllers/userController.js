@@ -7,17 +7,19 @@ let controllerErrors = require('./controllerErrors');
 class UserController {
     get(req, res, next) {
 
-        /*Verify a userId was passed in*/
+        /* Verify a userId was passed in otherwise return a 400 */
         if (!req.params.userId) {
             throw new controllerErrors.BadRequestError('The user id is required');
         }
 
-        /*Get the user*/
+        /* Get the user */
         userService.getById(req.params.userId)
             .then((user) => {
-                if(!user)
+                /* If there is no user, return a 404 */
+                if(!user) {
                     return next(new controllerErrors.ResourceNotFoundError());
-
+                }
+                /* Return the user */
                 res.send(user);
                 return next();
             })
@@ -29,15 +31,19 @@ class UserController {
             return next(new controllerErrors.BadRequestError('The user id is required.'));
         }
 
+        /* Ensure there is data that was passed */
         if (!req.body) {
             return next(new controllerErrors.BadRequestError('Missing user information.'));
         }
 
+        /* Update the user */
         userService.update(req.params.userId, req.body)
             .then((user) => {
-                if(!user)
+                /* If there is no user, return a 404 */
+                if(!user) {
                     return next(new controllerErrors.ResourceNotFoundError());
-
+                }
+                /* Return the updated user */
                 res.send(user);
                 return next();
             })

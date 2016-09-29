@@ -25,5 +25,8 @@
     "sequelize": "^3.24.1",
     "uuid": "^2.0.3",
     "winston": "^2.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.6.1"
   }
 }

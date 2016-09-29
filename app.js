@@ -6,7 +6,7 @@ let config = require('./config');
 let authentication = require('./security/authentication');
 let authorization = require('./security/authorization');
 
-process.on('uncaughtException', function (err) {
+process.on('uncaughtException',  (err) => {
     var logId = logging.processError(err, process, config);
 
     console.error(`Process exception.  Check log id: ${logId}`);
@@ -21,7 +21,6 @@ process.on('uncaughtException', function (err) {
 
 /*Create the restify api server*/
 let server = restify.createServer({name: config.server.name, version: config.server.version});
-server.pre(restify.pre.sanitizePath());
 
 /*Configure the server middleware*/
 server.use(restify.CORS()) /*allows cross domain resource requests*/
@@ -47,7 +46,7 @@ server.on('uncaughtException', (request, response, route, error) => {
 });
 
 /*Start listening*/
-server.listen(config.server.port, function () {
+server.listen(config.server.port,  () => {
     logging.info(`${server.name} is listening at ${server.url}`);
 });
 

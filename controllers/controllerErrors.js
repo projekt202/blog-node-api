@@ -9,7 +9,7 @@ class ValidationError extends restify.BadRequestError{
         this.body.code = 'InvalidInput';
         this.body.details = serviceValidationError.details;
 
-        Error.captureStackTrace(this, ValidationError);
+        Error.captureStackTrace(this, ValidationError); 
     }
 }
 
