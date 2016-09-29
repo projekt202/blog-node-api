@@ -50,7 +50,7 @@ module.exports = function (sequelize, DataTypes) {
             timestamps: true,
             freezeTableName: true,
             instanceMethods: {
-                /*This method is called by the models/index.js code*/
+                /* This method is called by the models/index.js code */
                 associate: function (models) {
                     /*Associate the todoModels to the user object so you can navigate as user.toDos as an array*/
                     user.hasMany(models.todo, {
@@ -62,7 +62,7 @@ module.exports = function (sequelize, DataTypes) {
                         }
                     });
 
-                    /*Associate the api claims to the user object so you can navigate as user.claims as an array*/
+                    /* Associate the api claims to the user object so you can navigate as user.claims as an array */
                     user.hasMany(models.claim, {
                         as: 'claims',
                         onDelete: 'CASCADE',

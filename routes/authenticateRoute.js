@@ -7,5 +7,4 @@ module.exports = function (server) {
 
     server.post({path: '/authenticate'}, restify.queryParser(), restify.jsonBodyParser(),
         authenticateController.check);
-
 };

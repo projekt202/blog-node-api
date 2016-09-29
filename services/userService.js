@@ -25,7 +25,7 @@ class UserService {
         });
     }
 
-    getPasswordForEmail(emailAddress, password) {
+    getPasswordForEmail(emailAddress) {
         return new Promise((resolve, reject) => {
             return modelManager.models.user.findOne({attributes: ['id', 'password'], where: {emailAddress: emailAddress}})
                 .then(resolve)
@@ -45,7 +45,7 @@ class UserService {
                             resolve(cleanOutgoingUser(user));
                         })
                         .catch(Sequelize.ValidationError, (validationError) => {
-                            reject(new serviceErrors.ValidationError(validationError))
+                            reject(new serviceErrors.ValidationError(validationError));
                         })
                         .catch(reject);
                 })
@@ -60,7 +60,7 @@ class UserService {
                     resolve(cleanOutgoingUser(createdUser));
                 })
                 .catch(Sequelize.ValidationError, (validationError) => {
-                    reject(new serviceErrors.ValidationError(validationError))
+                    reject(new serviceErrors.ValidationError(validationError));
 
                 })
                 .catch(reject);

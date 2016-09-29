@@ -19,33 +19,33 @@ process.on('uncaughtException',  (err) => {
     }
 });
 
-/*Create the restify api server*/
+/* Create the restify api server */
 let server = restify.createServer({name: config.server.name, version: config.server.version});
 
-/*Configure the server middleware*/
-server.use(restify.CORS()) /*allows cross domain resource requests*/
-    .use(restify.fullResponse()) /*allows the use of POST requests*/
-    .use(restify.acceptParser(server.acceptable)) /*parses out the accept header and ensures the server can respond to the client’s request*/
-    .use(restify.queryParser()) /*parses non-route values from the query string*/
-    .use(restify.bodyParser())  /*parses the body based on the content-type header*/
+/* Configure the server middleware */
+server.use(restify.CORS()) /* allows cross domain resource requests */
+    .use(restify.fullResponse()) /* allows the use of POST requests */
+    .use(restify.acceptParser(server.acceptable)) /*parses out the accept header and ensures the server can respond to the client’s request */
+    .use(restify.queryParser())  /* parses non-route values from the query string */
+    .use(restify.bodyParser());  /* parses the body based on the content-type header */
 
-/*Enable security middleware if set in the config*/
+/* Enable security middleware if set in the config */
 if(config.server.enableSecurity){
     server.use(authentication(server))
         .use(authorization(server));
 }
 
-/*Create all the routes for the server*/
+/* Create all the routes for the server */
 require('./routes')(server);
 
-/*Handle all uncaught exceptions.  These will be turned into 500 Internal Server Error responses and the details not leaked to the client*/
+/* Handle all uncaught exceptions.  These will be turned into 500 Internal Server Error responses and the details not leaked to the client */
 server.on('uncaughtException', (request, response, route, error) => {
     response.statusCode = 500;
     var logId = logging.webError(request, response, route, error);
     return response.send(500, {code: 'InternalServerError', message: 'An internal server error occurred', supportId: logId});
 });
 
-/*Start listening*/
+/* Start listening */
 server.listen(config.server.port,  () => {
     logging.info(`${server.name} is listening at ${server.url}`);
 });

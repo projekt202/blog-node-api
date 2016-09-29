@@ -8,7 +8,7 @@ class ValidationError extends Error{
         this.message = 'Invalid Data';
         this.name = 'ValidationError';
 
-        /*Assemble all the errors into a new array called details*/
+        /* Assemble all the errors into a new array called details */
         if(sequelizeValidationError.errors){
             this.details = sequelizeValidationError.errors.map(e => {
                 return {

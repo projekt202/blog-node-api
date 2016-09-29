@@ -5,7 +5,7 @@ class Logger {
         this.uuid = require('node-uuid');
         let winston = require('winston');
         this.logger = new winston.Logger({
-            transports: [
+            transports: [ 
                 new winston.transports.Console({
                     handleExceptions: true,
                     json: true,

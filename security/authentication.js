@@ -3,16 +3,15 @@ let claimService = new (require('../services/claimService'))();
 let userService = new (require('../services/userService'))();
 
 function authenticate(server) {
-    var server = server;
 
     function unauthorized(res, next){
-        res.send(401)
+        res.send(401);
         return next(false);
     }
 
     function authenticateRequest(req, res, next) {
 
-        /*Don't authenticate for create user and the authentication service*/
+        /* Don't authenticate for create user and the authentication service */
         if(req.url === '/authenticate'
             || (req.url === '/users' && req.method === 'POST' )){
             return next();
@@ -21,12 +20,12 @@ function authenticate(server) {
         /*If there isn't an api-key header then they aren't authenticated*/
         var apiKey = req.header('Authorization');
         if(!apiKey){
-            res.header('WWW-Authenticate','Bearer api-key'); /*RFC7235, Section 3.1*/
+            res.header('WWW-Authenticate','Bearer api-key'); /* RFC7235, Section 3.1 */
             return unauthorized(res, next);
         }
         apiKey = apiKey.replace('Bearer', '').trim();
 
-        /*Validate the token*/
+        /* Validate the token */
         claimService.validateToken(apiKey)
             .then((result)=>{
 
