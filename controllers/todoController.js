@@ -18,7 +18,10 @@ class TodoController {
                 res.send(todos);
                 return next();
             })
-            .catch(next);
+            .catch((e)=> {
+                req.server.emit('uncaughtException', req, res, req.route, e);
+                next(false);
+            });
     }
 
     update(req, res, next) {
@@ -38,7 +41,10 @@ class TodoController {
             .catch(serviceErrors.ValidationError, (e) => {
                 return next(new controllerErrors.ValidationError(e));
             })
-            .catch(next);
+            .catch((e)=> {
+                req.server.emit('uncaughtException', req, res, req.route, e);
+                next(false);
+            });
     }
 
     create(req, res, next) {
@@ -58,7 +64,10 @@ class TodoController {
             .catch(serviceErrors.ValidationError, (e) => {
                 return next(new controllerErrors.ValidationError(e));
             })
-            .catch(next);
+            .catch((e)=> {
+                req.server.emit('uncaughtException', req, res, req.route, e);
+                next(false);
+            });
     }
 
     del(req, res, next) {
@@ -71,7 +80,10 @@ class TodoController {
                 res.send(200);
                 return next();
             })
-            .catch(next);
+            .catch((e)=> {
+                req.server.emit('uncaughtException', req, res, req.route, e);
+                next(false);
+            });
     }
 }
 

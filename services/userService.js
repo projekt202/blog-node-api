@@ -29,9 +29,7 @@ class UserService {
         return new Promise((resolve, reject) => {
             return modelManager.models.user.findOne({attributes: ['id', 'password'], where: {emailAddress: emailAddress}})
                 .then(resolve)
-                .catch((error) => {
-                    throw error;
-                });
+                .catch(reject);
         });
     }
 
@@ -53,9 +51,7 @@ class UserService {
                             throw error;
                         });
                 })
-                .catch((error) => {
-                    throw error;
-                });
+                .catch(reject);
         });
     }
 
@@ -69,9 +65,7 @@ class UserService {
                     reject(new serviceErrors.ValidationError(validationError));
 
                 })
-                .catch((error) => {
-                    throw error;
-                });
+                .catch(reject);
         });
     }
 }

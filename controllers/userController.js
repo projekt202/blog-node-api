@@ -23,7 +23,10 @@ class UserController {
                 res.send(user);
                 return next();
             })
-            .catch(next);
+            .catch((e)=> {
+                req.server.emit('uncaughtException', req, res, req.route, e);
+                next(false);
+            });
     }
 
     update(req, res, next) {
@@ -52,7 +55,10 @@ class UserController {
             .catch(serviceErrors.ValidationError, (e) => {
                 return next(new controllerErrors.ValidationError(e));
             })
-            .catch(next);
+            .catch((e)=> {
+                req.server.emit('uncaughtException', req, res, req.route, e);
+                next(false);
+            });
     }
 
     create(req, res, next) {
@@ -64,7 +70,10 @@ class UserController {
             .catch(serviceErrors.ValidationError, (e) => {
                 return next(new controllerErrors.ValidationError(e));
             })
-            .catch(next);
+            .catch((e)=> {
+                req.server.emit('uncaughtException', req, res, req.route, e);
+                next(false);
+            });
     }
 }
 
