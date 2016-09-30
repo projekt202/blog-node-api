@@ -8,9 +8,8 @@ let serviceErrors = require('./serviceErrors');
 
 class ClaimService {
 
-    create(claim) {
+    create(req, user) {
         return new Promise((resolve, reject) => {
-
             /*Clean out any expired claims*/
             modelManager.models.claim.destroy({
                 where: {
@@ -20,10 +19,18 @@ class ClaimService {
                 }
             }); /* Don't wait until this finish to complete next command */
 
+            /* Create the authorization token */
+            let authToken = this.generateClaim(req, user);
+
             /*Then create the new claim*/
-            return modelManager.models.claim.create(claim)
+            return modelManager.models.claim.create({
+                userId: user.id,
+                token: authToken.clientToken,
+                signingKey: authToken.signingKey,
+                expiresAt: authToken.expirationDate
+            })
                 .then((createdClaim) => {
-                    resolve(createdClaim);
+                    resolve(createdClaim.token);
                 })
                 .catch(Sequelize.ValidationError, (validationError) => {
                     reject(new serviceErrors.ValidationError(validationError))

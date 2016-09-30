@@ -52,7 +52,7 @@ module.exports = function (sequelize, DataTypes) {
             instanceMethods: {
                 /* This method is called by the models/index.js code */
                 associate: function (models) {
-                    /*Associate the todoModels to the user object so you can navigate as user.toDos as an array*/
+                    /* Associate the todoModels to the user object so you can navigate as user.toDos as an array */
                     user.hasMany(models.todo, {
                         as: 'toDos',
                         onDelete: 'CASCADE',

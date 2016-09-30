@@ -1,9 +1,8 @@
 'use strict';
 
-
 class ValidationError extends Error{
     constructor(sequelizeValidationError){
-        super({message: 'Invalid Data'});
+        super();
 
         this.message = 'Invalid Data';
         this.name = 'ValidationError';

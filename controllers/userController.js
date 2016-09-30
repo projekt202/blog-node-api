@@ -27,6 +27,8 @@ class UserController {
     }
 
     update(req, res, next) {
+
+        /* Ensure there a userId was passed in */
         if (!req.params.userId) {
             return next(new controllerErrors.BadRequestError('The user id is required.'));
         }

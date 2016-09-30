@@ -27,8 +27,11 @@ server.use(restify.CORS()) /* allows cross domain resource requests */
     .use(restify.fullResponse()) /* allows the use of POST requests */
     .use(restify.acceptParser(server.acceptable)) /*parses out the accept header and ensures the server can respond to the client’s request */
     .use(restify.queryParser())  /* parses non-route values from the query string */
-    .use(restify.bodyParser());  /* parses the body based on the content-type header */
-
+    .use(restify.bodyParser())  /* parses the body based on the content-type header */
+    .use((req, res, next)=> {
+        req.server = server;
+        next();
+    });
 /* Enable security middleware if set in the config */
 if(config.server.enableSecurity){
     server.use(authentication(server))

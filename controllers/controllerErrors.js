@@ -33,8 +33,21 @@ class ResourceNotFoundError extends restify.ResourceNotFoundError{
     }
 }
 
+class UnauthorizedError extends restify.UnauthorizedError {
+    constructor() {
+        super({message: 'You are not authorized to perform this function'});
+
+        this.body.code = 'UnauthorizedError';
+
+        Error.captureStackTrace(this, UnauthorizedError);
+    }
+}
+
+
 module.exports.BadRequestError = BadRequestError;
 
 module.exports.ResourceNotFoundError = ResourceNotFoundError;
 
 module.exports.ValidationError = ValidationError;
+
+module.exports.UnauthorizedError = UnauthorizedError;

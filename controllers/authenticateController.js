@@ -1,5 +1,5 @@
 'use strict';
-let restify = require('restify');
+
 let userService = new (require('../services/userService'))();
 let claimService = new (require('../services/claimService'))();
 let serviceErrors = require('../services/serviceErrors');
@@ -8,6 +8,7 @@ let passwordHash = require('password-hash');
 
 
 class AuthenticateController {
+
     check(req, res, next) {
         /* Ensure the required fields were sent */
         if(!req.body.emailAddress || !req.body.password){
@@ -24,26 +25,22 @@ class AuthenticateController {
                     return next(new controllerErrors.UnauthorizedError());
                 }
 
-                /* Create the authorization token */
-                let authToken = claimService.generateClaim(req, user);
-
-                /* Store the signing key for the client token so we can validate it later. */
-                claimService.create({userId:user.id, token:authToken.clientToken, signingKey: authToken.signingKey, expiresAt: authToken.expirationDate})
-                    .then(function(){
+                /* Create and return the claim */
+                claimService.create(req, user)
+                    .then(function (clientToken) {
                         /* Return the client's token to the caller */
-                        res.send({token:authToken.clientToken});
+                        res.send({token: clientToken});
                         return next();
                     })
                     .catch(serviceErrors.ValidationError, (e) => {
                         return next(new controllerErrors.BadRequestError(e));
                     })
-                    .catch((e) => {
-                        return next(new controllerErrors.InternalServerError(e));
-                    });
+                    .catch(next);
 
             })
-            .catch((e) => {
-                return next(new controllerErrors.InternalServerError(e));
+            .catch((e)=> {
+                req.server.emit('uncaughtException', req, res, req.route, e);
+                next(false);
             });
 
     }

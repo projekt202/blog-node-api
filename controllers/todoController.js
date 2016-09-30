@@ -1,6 +1,5 @@
 'use strict';
 
-let restify = require('restify');
 let todoService = new (require('../services/todoService'))();
 let serviceErrors = require('../services/serviceErrors');
 let controllerErrors = require('./controllerErrors');
@@ -24,11 +23,11 @@ class TodoController {
 
     update(req, res, next) {
         if (!req.params.id || !req.params.userId) {
-            return next(new restify.BadRequestError('The todo and user id\'s are required.'));
+            return next(new controllerErrors.BadRequestError('The todo and user id\'s are required.'));
         }
 
         if (!req.body) {
-            return next(new restify.BadRequestError('Missing todo information.'));
+            return next(new controllerErrors.BadRequestError('Missing todo information.'));
         }
 
         todoService.update(req.params.userId, req.params.id, req.body)
@@ -44,11 +43,11 @@ class TodoController {
 
     create(req, res, next) {
         if (!req.params.userId) {
-            return next(new restify.BadRequestError('The user id is required.'));
+            return next(new controllerErrors.BadRequestError('The user id is required.'));
         }
 
         if (!req.body) {
-            return next(new restify.BadRequestError('Missing todo information.'));
+            return next(new controllerErrors.BadRequestError('Missing todo information.'));
         }
 
         todoService.create(req.params.userId, req.body)
@@ -64,7 +63,7 @@ class TodoController {
 
     del(req, res, next) {
         if (!req.params.todoId || !req.params.userId) {
-            return next(new restify.BadRequestError('The todo and user id\'s are required.'));
+            return next(new controllerErrors.BadRequestError('The todo and user id\'s are required.'));
         }
 
         todoService.delete(req.params.userId, req.params.todoId)
