@@ -13,7 +13,7 @@ class ValidationError extends Error{
                 return {
                     property: e.path,
                     message:e.message == null ? null : e.message.replace(e.path,'').trim()
-                }
+                };
             });
         }
 
@@ -21,4 +21,28 @@ class ValidationError extends Error{
     }
 }
 
+class InvalidUserPassword extends Error {
+    constructor() {
+        super();
+
+        this.message = 'Invalid User Password';
+        this.name = 'InvalidUserPassword';
+
+        Error.captureStackTrace(this, InvalidUserPassword);
+    }
+}
+
+class InvalidClaim extends Error {
+    constructor() {
+        super();
+
+        this.message = 'Invalid Claim';
+        this.name = 'InvalidUClaim';
+
+        Error.captureStackTrace(this, InvalidClaim);
+    }
+}
+
 module.exports.ValidationError = ValidationError;
+module.exports.InvalidUserPassword = InvalidUserPassword;
+module.exports.InvalidClaim = InvalidClaim;

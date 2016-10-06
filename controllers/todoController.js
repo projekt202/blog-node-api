@@ -75,7 +75,7 @@ class TodoController {
             return next(new controllerErrors.BadRequestError('The todo and user id\'s are required.'));
         }
 
-        todoService.delete(req.params.userId, req.params.todoId)
+        todoService.del(req.params.userId, req.params.todoId)
             .then(() => {
                 res.send(200);
                 return next();

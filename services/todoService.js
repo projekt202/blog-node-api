@@ -19,7 +19,7 @@ function getTodoByUserId(userId, todoId) {
 class TodoService {
     getByUserId(userId) {
         return new Promise((resolve, reject) => {
-            return modelManager.models.todo.findAll({where: {userId: userId}})
+            modelManager.models.todo.findAll({where: {userId: userId}})
                 .then(resolve)
                 .catch(reject);
         });
@@ -27,7 +27,7 @@ class TodoService {
 
     update(userId, todoId, updatedTodo) {
         return new Promise((resolve, reject) => {
-            return getTodoByUserId(userId, todoId)
+            getTodoByUserId(userId, todoId)
                 .then((todo) => {
                     return todo.updateAttributes(updatedTodo)
                         .then(resolve)
@@ -43,7 +43,7 @@ class TodoService {
     create(userId, todo) {
         todo.userId = userId;
         return new Promise((resolve, reject) => {
-            return modelManager.models.todo.create(todo)
+            modelManager.models.todo.create(todo)
                 .then(resolve)
                 .catch(Sequelize.ValidationError, (error) => {
                     reject(new serviceErrors.ValidationError(error));
@@ -52,9 +52,9 @@ class TodoService {
         });
     }
 
-    delete(userId, todoId) {
+    del(userId, todoId) {
         return new Promise((resolve, reject) => {
-            return getTodoByUserId(userId, todoId)
+            getTodoByUserId(userId, todoId)
                 .then((todo) => {
                     if(!todo){
                         resolve();

@@ -11,7 +11,7 @@ class ValidationError extends restify.BadRequestError{
 
         Error.captureStackTrace(this, ValidationError);
     }
-}
+} 
 
 class BadRequestError extends restify.BadRequestError{
     constructor(message){
